@@ -1,5 +1,6 @@
 import { XMarkIcon } from '@heroicons/react/24/solid'
 
+import { Link } from "react-router-dom"
 import { ShoppingCartContext } from '../../context'
 import { useContext } from 'react'
 import { totalPrice } from '../../utilis'
@@ -9,10 +10,22 @@ import "./styles.css"
 const CheckoutSideMenu = () => {
     const context = useContext (ShoppingCartContext)
 
-    const handleDelete = (id) => {
-        const filteredProduct = context.cartProducts.filter(product => product.id != id)
-        context.setCartProducts(filteredProduct)
+const handleDelete = (id) => {
+    const filteredProduct = context.cartProducts.filter(product => product.id != id)
+    context.setCartProducts(filteredProduct)
+}
+
+const handleCheckout = () => {
+    const orderToAdd = {
+        data: "01.02.23",
+        products: context.cartProducts,
+        totalProducts: context.cartProducts.length,
+        totalPrice: totalPrice(context.cartProducts)
     }
+
+    context.setOrder([...context.order, orderToAdd])
+    context.setCartProducts([])
+}
 
     return (
         <aside 
@@ -27,7 +40,7 @@ const CheckoutSideMenu = () => {
                 </div>
             </div>
 
-            <div className=" container px-6  overflow-y-scroll ">
+            <div className=" container px-6  overflow-y-scroll flex-1 ">
             {context.cartProducts.map(product => (
                 <OrderCard 
                 key={product.id}
@@ -40,11 +53,17 @@ const CheckoutSideMenu = () => {
             ))}
             </div>
 
-            <div className="px-6"> 
-                <p className="flex  justify-between items-center">
+            <div className="px-6 mb-6"> 
+                <p className="flex  justify-between items-center mb-4">
                     <span className="font-bold ">Total:</span>
                     <span className="font-bold text-2xl text-green-500">${totalPrice(context.cartProducts)}</span>
                 </p>
+
+                <Link to="/my-orders/last">
+                    <button className= "w-full bg-black py-3 text-white font-bold rounded-lg"
+                    onClick={() => handleCheckout()}>Checkout</button>
+                </Link>
+
             </div>
         </aside>
     )
