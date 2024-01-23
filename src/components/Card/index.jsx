@@ -1,4 +1,5 @@
 import { PlusIcon } from "@heroicons/react/24/solid"
+import { CheckIcon } from "@heroicons/react/24/solid"
 
 import { useContext } from "react"
 import {ShoppingCartContext} from "../../context"
@@ -10,7 +11,37 @@ const Card = (data) => {
     context.openProductDetail()
     context.setProductToShow(productDetail)
   }
-    
+
+const addProductsToCart = (event, productData) => {
+    event.stopPropagation()
+    context.setCount(context.count + 1)
+    context.setCartProducts([...context.cartProducts, productData])
+    context.openCheckoutSideMenu()
+}
+
+    const renderIcon = (id) => {
+        const isInCart = context.cartProducts.filter(product => product.id === id).length > 0
+
+        if (isInCart) {                   
+            return (
+                <div 
+                className=" absolute top-0 
+                right-0 flex justify-center items-center  bg-green-500 w-6 h-6 rounded-full p-1 m-2 "> 
+
+                <CheckIcon className="h-6 w-6 text-white" /> 
+                </div>
+                )}
+        else {
+            return (
+            <div 
+                className=" absolute top-0 
+                right-0 flex justify-center items-center bg-white w-6 h-6 rounded-full p-1 m-2 " 
+                onClick={(event) =>addProductsToCart (event, data.data) }> 
+
+                <PlusIcon className="h-6 w-6" /> 
+            </div>)
+            }}
+            
     return (
         <div 
         className="bg-white cursor-pointer w-56 h-60 rounded-lg"
@@ -21,8 +52,7 @@ const Card = (data) => {
                 <img className=" w-full h-full object-cover rounded-lg"
                 src={data.data.images} alt={data.data.title} />
                 
-                <div className=" absolute top-0 
-                 right-0 flex justify-center items-center bg-white w-6 h-6 rounded-full p-1 m-2 " onClick={() => context.setCount(context.count + 1)}> <PlusIcon className="h-6 w-6"/> </div>
+                {renderIcon (data.data.id)}
                 
             </figure>
             <p className=" flex justify-between">
