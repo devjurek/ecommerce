@@ -1,4 +1,6 @@
 import { ShoppingBagIcon } from "@heroicons/react/24/solid"
+import {MagnifyingGlassIcon} from "@heroicons/react/24/solid"
+
 
 import {NavLink } from "react-router-dom"
 import { useContext } from "react"
@@ -21,7 +23,8 @@ const Navbar = () => {
             </li>
             <li>
             <NavLink 
-            to="/home"
+            to="/"
+            onClick={() => context.setSearchByCategory()}
             className= {({ isActive }) =>
               isActive ? activeStyle : undefined}>
                 All
@@ -30,6 +33,7 @@ const Navbar = () => {
             <li>
             <NavLink 
             to="/clothes"
+            onClick={() => context.setSearchByCategory("clothes")}
             className={({ isActive }) =>
               isActive ? activeStyle : undefined}>
                 Clothes
@@ -38,6 +42,7 @@ const Navbar = () => {
             <li>
             <NavLink 
             to="/electronics"
+            onClick={() => context.setSearchByCategory("electronics")}
             className={({ isActive }) =>
               isActive ? activeStyle : undefined}>
                 Electronics
@@ -46,6 +51,7 @@ const Navbar = () => {
             <li>
             <NavLink 
             to="/furnitures"
+            onClick={() => context.setSearchByCategory("furnitures")}
             className={({ isActive }) =>
               isActive ? activeStyle : undefined}>
                 Furnitures
@@ -54,6 +60,7 @@ const Navbar = () => {
             <li>
             <NavLink 
             to="/toys"
+            onClick={() => context.setSearchByCategory("toys")}
             className={({ isActive }) =>
               isActive ? activeStyle : undefined}>
                 Toys
@@ -62,11 +69,25 @@ const Navbar = () => {
             <li>
             <NavLink 
             to="/others"
+            onClick={() => context.setSearchByCategory("others")}
             className={({ isActive }) =>
               isActive ? activeStyle : undefined}>
                 Others
             </NavLink>
             </li>
+
+            <li className="flex items-center gap-3">
+              <div className="relative">
+                <input type="text" 
+                placeholder="Search Product in Not.Shopi" 
+                
+                className=" rounded-lg border border-green-500 w-80 p-2 mb-0 focus:outline-none pl-3"
+                onChange={(event) => context.setSearchByTitle(event.target.value)} > 
+                </input>
+              <MagnifyingGlassIcon className="h-6 w-6 absolute right-2 top-2 text-gray-500 pr-1"/> 
+              </div>
+            </li>
+            
         </ul>
 
         <ul className="flex items-center gap-3">
@@ -100,7 +121,7 @@ const Navbar = () => {
             <li className="flex items-center">
             <ShoppingBagIcon className="h-6 w-6"/> 
             <div>
-            {context.count}
+            {context.cartProducts.length}
             </div>
             
             </li>

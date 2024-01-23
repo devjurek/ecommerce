@@ -1,23 +1,55 @@
 
-import { useState, useEffect } from "react"
 import Layout from "../../components/layout"
 import Card from "../../components/Card"
 import ProductDetail from "../../components/productDetail"
+import { useContext } from 'react'
+import { ShoppingCartContext } from "../../context"
 
 function Home() {
-  const [items, setItems] = useState(null)
+  const context = useContext (ShoppingCartContext)
+  const renderView = () => {
+    
+      if (context.filteredItems?.length > 0) {
+        return (
+          context.filteredItems?.map(item => (<Card key={item.id} data={item} />))
+        )
+      } else {
+        return (
+          <div>We don´t have anything</div>
+        )
+      }
+    }   
 
-  useEffect(() => {
-    fetch("https://api.escuelajs.co/api/v1/products")
-    .then(response => response.json())
-    .then(data => setItems(data))
-  }, [])
+/*     if (context.searchByTitle?.length > 0) {
+      if (context.filteredItems?.length > 0) {
+        return (
+          context.filteredItems?.map(item => (
+            <Card key={item.id} data={item} />
+          ))
+        )
+      } else {
+        return (
+          <div>We dont have anything </div>
+        )
+      }
+    } else {
+      return (
+        context.items?.map(item => (
+          <Card key={item.id} data={item} />
+        ))
+      )
+    }
+  } */
 
   return (
     <Layout>
-      Home
+
+      <div className="flex w-80 items-center relative justify-center mb-6">
+        <h1 className="font-medium text-xl"> Products</h1>
+      </div>
+
       <div className="grid gap-4 grid-cols-4 w-full max-w-screen-lg">
-      { items?.map(item => (<Card key={item.id} data={item} />))}
+        {renderView ()}
       </div>
       <ProductDetail/>
     </Layout>
